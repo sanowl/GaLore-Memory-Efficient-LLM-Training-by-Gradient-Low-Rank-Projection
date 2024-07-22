@@ -13,6 +13,7 @@ pub enum Activation {
 }
 
 impl Activation {
+    // Forward pass for activation functions
     fn forward(&self, x: &mut Array1<f32>) {
         match self {
             Activation::ReLU => x.mapv_inplace(|a| a.max(0.0)),
@@ -21,7 +22,7 @@ impl Activation {
             Activation::Tanh => x.mapv_inplace(|a| a.tanh()),
         }
     }
-
+ // Backward pass for activation functions
     fn backward(&self, x: &Array1<f32>, grad: &mut Array1<f32>) {
         match self {
             Activation::ReLU => grad.zip_mut_with(x, |g, &x| *g *= if x > 0.0 { 1.0 } else { 0.0 }),
