@@ -3,6 +3,7 @@ use ndarray_linalg::{Eigh, SVD};
 use std::sync::Arc;
 use rayon::prelude::*;
 
+
 pub struct GaLoreProjection {
     rank: usize,
     update_freq: usize,

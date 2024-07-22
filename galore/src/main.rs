@@ -1,4 +1,19 @@
-use ndarray::{Array2, ArrayView2};
+use ndarray::{Array2, ArrayView2, s};
+use ndarray_linalg::SVD;
+
+fn svd_lowrank(matrix: &ArrayView2<f32>, rank: usize) -> (Array2<f32>, Array2<f32>, Array2<f32>) {
+    let (u_opt, s_opt, vt_opt) = matrix.svd(true, true).expect("SVD failed");
+
+    let u = u_opt.unwrap().slice(s![.., ..rank]).to_owned();
+    let s = Array2::from_diag(&s_opt.unwrap().slice(s![..rank]));
+    let vt = vt_opt.unwrap().slice(s![..rank, ..]).to_owned();
+
+    (u, s, vt)
+}
+
+fn project_gradient(gradient: &ArrayView2<f32>, p: &ArrayView2<f32>, q: &ArrayView2<f32>) -> Array2<f32> {
+    p.t().dot(&gradient.dot(q))
+}
 
 fn main() {
     // Example usage
