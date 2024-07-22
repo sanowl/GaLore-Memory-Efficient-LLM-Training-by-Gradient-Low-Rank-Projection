@@ -96,7 +96,8 @@ impl Layer {
             ln.forward(&mut output);
         }
         if training && self.dropout_rate > 0.0 {
-            let mask = Array1::random(output.len(), Uniform::new(0.0, 1.0)) .map(|&x| if x > self.dropout_rate { 1.0 } else { 0.0 }) / (1.0 - self.dropout_rate);
+            let mask = Array1::random(output.len(), Uniform::new(0.0, 1.0))
+                .map(|&x| if x > self.dropout_rate { 1.0 } else { 0.0 }) / (1.0 - self.dropout_rate);
             output *= &mask;
         }
         output
@@ -118,6 +119,7 @@ impl Layer {
     
         (grad_weights, grad_biases, grad_input, ln_grads)
     }
+}
 
 pub struct NeuralNetwork {
     layers: Vec<Layer>,
@@ -142,12 +144,12 @@ impl NeuralNetwork {
         output
     }
 
-    pub fn backward(&self, mut grad_output: Array1<f32>, inputs: &[ArrayView1<f32>]) -> Vec<(Array2<f32>, Array1<f32>)> {
+    pub fn backward(&self, mut grad_output: Array1<f32>, inputs: &[ArrayView1<f32>]) -> Vec<(Array2<f32>, Array1<f32>, Option<(Array1<f32>, Array1<f32>)>)> {
         let mut grads = Vec::new();
         let mut grad_input = grad_output;
         for (layer, input) in self.layers.iter().zip(inputs.iter()).rev() {
-            let (grad_weights, grad_biases, new_grad_input) = layer.backward(&mut grad_input, input);
-            grads.push((grad_weights, grad_biases));
+            let (grad_weights, grad_biases, new_grad_input, ln_grads) = layer.backward(&mut grad_input, input);
+            grads.push((grad_weights, grad_biases, ln_grads));
             grad_input = new_grad_input;
         }
         grads.reverse();
