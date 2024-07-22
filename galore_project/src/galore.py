@@ -2,6 +2,7 @@ import math
 import torch
 from torch.optim import Optimizer
 
+
 def _project_gradient(grad, P):
     if P.shape[0] <= P.shape[1]:
         return P.t() @ grad
@@ -14,6 +15,7 @@ def _project_back(update, P):
         return P @ update
     else:
         return update @ P.t()
+
 
 class GaLore(Optimizer):
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
