@@ -29,6 +29,8 @@ def parse_args():
     return parser.parse_args()
 
 
+
+
 def setup_logging(output_dir):
     os.makedirs(output_dir, exist_ok=True)
     logging.basicConfig(
@@ -45,6 +47,7 @@ def save_checkpoint(state, is_best, filename):
     if is_best:
         best_path = os.path.join(os.path.dirname(filename), 'best_checkpoint.pth')
         torch.save(state, best_path)
+
 def load_checkpoint(filename, model, optimizer=None, scheduler=None):
     if os.path.isfile(filename):
         checkpoint = torch.load(filename)
@@ -58,9 +61,11 @@ def load_checkpoint(filename, model, optimizer=None, scheduler=None):
         return model, optimizer, scheduler, epoch, best_val_loss
     else:
         raise FileNotFoundError(f"No checkpoint found at '{filename}'")
+
 def setup_distributed(args):
     dist.init_process_group(backend="nccl")
     torch.cuda.set_device(args.local_rank)
+
 def get_model_and_tokenizer(args):
     tokenizer = GPT2Tokenizer.from_pretrained(args.model_name)
     model = GPT2LMHeadModel.from_pretrained(args.model_name)
