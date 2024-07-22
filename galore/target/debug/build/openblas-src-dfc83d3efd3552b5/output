@@ -1,0 +1,4 @@
+cargo:rustc-link-search=/opt/homebrew/opt/openblas/lib
+cargo:rustc-link-search=/opt/homebrew/opt/libomp/lib
+cargo:rustc-link-lib=dylib=openblas
+cargo:rustc-link-lib=dylib=openblas

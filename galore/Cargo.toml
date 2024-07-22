@@ -1,0 +1,13 @@
+[package]
+name = "galore"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ndarray = { version = "0.15.6", features = ["blas"] }
+ndarray-linalg = { version = "0.16", features = ["openblas-system"] }
+rayon = "1.7"
+
+[features]
+default = ["blas"]
+blas = ["ndarray-linalg/openblas-system"]
