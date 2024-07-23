@@ -37,7 +37,7 @@ def setup_logging(output_dir: str) -> None:
         level=logging.INFO
     )
     console = logging.StreamHandler()
-    console.setLevel(logsging.INFO)
+    console.setLevel(logging.INFO)
     logging.getLogger('').addHandler(console)
     logging.info("Logging setup complete.")
 
